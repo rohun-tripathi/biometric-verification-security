@@ -1,0 +1,136 @@
+// the one being used cb_splash_screem not working
+
+#include<pwrap2.h>
+
+#include<sqlite3.h>
+
+#include<stdlib.h>
+#include<string.h>
+
+#include"features.h"
+
+
+Bool cb_entry_num(pw_widget w, pw_event e);
+ 
+
+pw_widget toplevel,reg_screen,reg_butt, reg_entry_name, reg_entry_userid, reg_entry_age, reg_entry_gender, reg_label;
+
+pw_widget donereg_screen, donereg_label;
+void show_frame_home();
+
+void hide_reg_screen()
+{
+	pw_hide(reg_screen);
+	return;
+}
+
+void show_frame_donereg()
+{
+	donereg_screen = pw_create_frame(toplevel,0, 100 , 240, 75,
+                        PW_BGCOLOR, GREEN ,
+                        PW_CONFIG_END);
+
+	donereg_label = pw_create_label(donereg_screen, 50, 25, 100, 30,
+			PW_TEXT,"Registeration Done",
+			PW_FONT, PW_BOLD_FONT,
+			//PW_BORDER, PW_RECTANGLE_BORDER,
+			//PW_CALLBACK, PW_BUTTON_RELEASE_EVENT,cb_alocfrm_date,
+			PW_FGCOLOR, "BLACK",
+			PW_BGCOLOR, GREY,
+			PW_CONFIG_END);
+	pw_show(donereg_screen);
+	sleep(2);
+	pw_hide(donereg_screen);			
+	return;
+}
+
+
+Bool chng_reg_page()
+{
+	char name[20] = {"\0"};
+	char age[20] = {"\0"};
+	char gender[20] = {"\0"};
+	char user_id[20] = {"\0"};
+	strcpy(name,pw_get_text(reg_entry_name));
+	strcpy(age,pw_get_text(reg_entry_age));
+	strcpy(gender,pw_get_text(reg_entry_gender));
+	strcpy(user_id,pw_get_text(reg_entry_userid));
+	printf("\n::::::::%s::::\n",age);
+	if(strcmp(name,"")==0|| strcmp(user_id,"")==0|| strcmp(gender,"")==0|| strcmp(age,"")==0)
+	{
+			pw_set_text(reg_label,"please fill all and try again");
+	}
+	else
+	{
+			
+////////////////sqlite stuff
+
+
+	char query[512];
+	int i =0;	
+	sqlite3 *dbhandle=NULL;
+	sqlite3_open(DB_PACK, &dbhandle);
+	
+	sprintf(query,"CREATE TABLE shop_keepers(name  varchar(15),User_ID varchar(15), age int(2), Gender varchar(2))");
+	i=sqlite3_exec(dbhandle, query, NULL, NULL,NULL);
+
+	
+
+
+
+//////////exit this and return to home
+
+	show_frame_donereg();	
+	hide_reg_screen();
+	show_frame_home();
+	}		 
+	return False;
+}
+
+
+void show_frame_register()
+{
+	reg_screen = pw_create_frame(toplevel,0, 40, 240, 230,
+                        PW_BGCOLOR, GREEN ,
+                        PW_CONFIG_END);
+//submit the id 
+	
+	reg_label = pw_create_label(reg_screen, 55, 10, 160, 20,
+			PW_TEXT,"Enter ur details",
+			PW_FONT, PW_BOLD_FONT,
+			//PW_BORDER, PW_RECTANGLE_BORDER,
+			//PW_CALLBACK, PW_BUTTON_RELEASE_EVENT,cb_alocfrm_date,
+			PW_FGCOLOR, "BLACK",
+			PW_CONFIG_END);
+	
+	reg_entry_userid = pw_create_entry(reg_screen,55, 40,70, 20,
+			PW_FONT, PW_BOLD_FONT,
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_entry_num,
+			PW_CONFIG_END);
+
+	reg_entry_name = pw_create_entry(reg_screen,55, 70,70, 20,
+			PW_FONT, PW_BOLD_FONT,
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_entry_num,
+			PW_CONFIG_END);
+	reg_entry_age = pw_create_entry(reg_screen,55, 100,70, 20,
+			PW_FONT, PW_BOLD_FONT,
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_entry_num,
+			PW_CONFIG_END);
+	reg_entry_gender = pw_create_entry(reg_screen,55,130,70, 20,
+			PW_FONT, PW_BOLD_FONT,
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_entry_num,
+			PW_CONFIG_END);
+
+	reg_butt = pw_create_button(reg_screen,55, 160, 50,20,
+                        PW_ACTIVE_IMAGE, "ADD.png",
+                        PW_NORMAL_IMAGE, "ADD.png",
+                        PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, chng_reg_page,
+                        PW_CONFIG_END);
+
+
+
+	//pw_eventloop();
+	return;
+
+}	
+

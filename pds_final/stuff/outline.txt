@@ -1,0 +1,65 @@
+
+refresh button for customers or shud it be automated?
+at the end of each month, does it gets automatically refreshed, the amount u they can take //not yet implemented
+
+DEAND STOCK MODULE:
+	the  shopkepper can clear the authentication to order for some thing that is short in his shop, like sugar upto a limit 
+	which the supplier is supposed to get next time he comes
+
+main page:
+ROOT MODULE:
+	root button:
+		enter pass and userid(1,1)
+		biometric page and one entry tryagain and home button
+		entry of three radiobutton to be entered in the table and we have registered a shpkeeper
+		
+	root_customer button:
+		wanna add customers also from the machine do the above thing but to different table
+		enter pass and userid(1,1)
+		biometric page and one entry tryagain and home button
+		entry of one and a aadhar card to be entered in the table and we have registered a shpkeeper
+	
+SALE MODULE:
+		
+	sale button:
+		u see a biometric (to prove for the shopkeeper) and a way to return home
+		clear biometric to reach ENTERID PAGE of customer!
+		clear customer biometric to reach order page
+		
+		1	a	10	M	10	10	0
+		2	b	20	M	10	20	20
+		3	c	30	F	10	10	0
+		4	d	40	F	0	0	5
+		
+		reach order specification page, put order
+		it will check if x user can actally take that much && if there is that much of the item in the storage	//not yet implemented
+		calculates price and displays along with the biometric for the customer
+		clear biometric and pay
+	
+SUPPLIER MODULE:	
+	he comes and adds to the table the amount of stuff he has brought for the shop
+	
+	instoretable:
+	wheat	10 
+	rice	10
+	sugar	10
+	
+	clicks on supplier button,
+	ist page has a biometric to just check him and home button
+	enter the amounts in three entries available to him //check that the entries are in ryt format
+	3rd page has a biometric to take consent of shopkeeper
+	done, now display button to return to home
+
+INSPECTOR MODULE(MIS):
+	goto page with two options: biometric of shopkeepers(3) or of inspector(1)
+	click and module to see what all was the amount 
+	1 that was sold today
+	2 since stuff last time it was brot;
+	3 amount that was brought last time
+	4 the amount left for each resource
+
+	also check how much any one particular customer can take of all products 
+
+DOWNLOAD AND UPLOAD:
+	upload all tables to server
+	maybe the refresh thingy can be done here

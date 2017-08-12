@@ -1,0 +1,53 @@
+void show_frame_enrollcust()
+{
+/*	
+////////////////sqlite stuff
+
+	char query[512];
+	int i =0;	
+	sqlite3 *dbhandle=NULL;
+	sqlite3_open(DB_PACK, &dbhandle);
+	
+	sprintf(query,"CREATE TABLE customers(name  varchar(15),User_ID varchar(15), age int(2), Gender varchar(2))");
+	
+	i=sqlite3_exec(dbhandle, query, NULL, NULL,NULL);
+
+//	this one is useless as the i will always get a 1 value at completion of query
+//	printf("::::::::::::::::::%d::::::::::::::::::",i);
+
+
+//page graphics begin
+	enroll_cscreen = pw_create_frame(toplevel,0, 40, 240, 230,
+                        PW_BGCOLOR, GREY ,
+                        PW_CONFIG_END);
+
+	enroll_clabel = pw_create_label(enroll_screen, 20, 5, 200, 40,
+			PW_TEXT,"Choose radibutton and press thumb to sensor",
+			PW_FONT, PW_BOLD_FONT,
+			//PW_BORDER, PW_RECTANGLE_BORDER,
+			//PW_CALLBACK, PW_BUTTON_RELEASE_EVENT,cb_alocfrm_date,
+			PW_FGCOLOR, "BLACK",
+                        PW_BGCOLOR, GREY ,
+			PW_CONFIG_END);
+	
+	enroll_cbutt_tryag = pw_create_button(enroll_screen, 20, 90, 75,25,
+                        PW_ACTIVE_IMAGE, "tryag.png",
+                        PW_NORMAL_IMAGE, "tryag.png",
+                        PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_try_again,
+                        PW_CONFIG_END);
+
+	enroll_cbutt_home = pw_create_button(enroll_screen, 20, 130, 50,18,
+                        PW_ACTIVE_IMAGE, "home.png",
+                        PW_NORMAL_IMAGE, "home.png",
+                        PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_enroll_screen,
+                        PW_CONFIG_END);
+	rb_benificary_cenroll = pw_create_radiobutton(enroll_screen,50, 50, 20, 20, NULL, 
+			PW_BGCOLOR, GREY, 
+			PW_FONT, PW_BOLD_FONT, 
+			PW_FGCOLOR, "white", 
+			PW_TEXT, "",
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, keeper_enroll_bio,
+			PW_NA);
+
+	*/return;
+}

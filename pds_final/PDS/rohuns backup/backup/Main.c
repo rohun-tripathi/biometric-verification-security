@@ -1,0 +1,108 @@
+//introducing sqlite
+#include<sqlite3.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<pwrap2.h>
+
+//#include "funct2.c"
+#include"features_live.h"
+
+#ifdef __arm__
+#include <biometric.h>
+#endif
+
+
+pw_widget toplevel, splash_screen ,Butt_splash, rb_benificary_splash;
+
+
+
+//////////declaring functions already in header is not necessary
+
+///// to move to next frame
+void hide_splash_screen()
+{
+	pw_hide(splash_screen);
+}
+
+void show_frame_idnumberpage();
+	
+///// for biometric scan enrollment
+int scan_template(char *fname);
+
+int keeper_enroll();
+
+void keeper_enroll_splash()
+{
+	int retval = keeper_enroll();
+	
+	printf("ret value is= %d\n", retval);
+
+	if(retval == 0)
+	{
+		//enroll_flag[i] = ENROLLED;
+		pw_set_bgcolor(rb_benificary_splash, "green");
+		//if(validate_mandatory_enroll_flag() == 1)
+		//	pw_enable(Butt_beneficary_enroll);
+	}
+	else
+	{
+		//enroll_flag[i] = NOT_ENROLLED;
+		pw_set_bgcolor(rb_benificary_splash, VIOLET);
+		//pw_disable(Butt_beneficary_enroll);
+	}
+	return;
+}
+
+
+Bool cb_splash_screen()
+{
+	hide_splash_screen();
+	show_frame_idnumberpage();
+	return False;
+}
+
+
+void show_frame_shop()
+{
+	
+////////////////sqlite stuff
+
+
+	char query[512];
+	int i =0;	
+	sqlite3 *dbhandle=NULL;
+	sqlite3_open(DB_PACK, &dbhandle);
+	
+	sprintf(query,"CREATE TABLE shop_keepers(name  varchar(15),User_ID varchar(15), age int(2), Gender varchar(2))");
+	
+	i=sqlite3_exec(dbhandle, query, NULL, NULL,NULL);
+
+//	this one is useless as the i will always get a 1 value at completion of query
+//	printf("::::::::::::::::::%d::::::::::::::::::",i);
+
+
+
+
+//page graphics begin
+	splash_screen = pw_create_frame(toplevel,0, 40, 240, 230,
+                        PW_BGCOLOR, GREY ,
+                        PW_CONFIG_END);
+
+	Butt_splash = pw_create_button(splash_screen, 50, 100, 50,30,
+                        PW_ACTIVE_IMAGE, "ADD.png",
+                        PW_NORMAL_IMAGE, "ADD.png",
+                        PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, cb_splash_screen,
+                        PW_CONFIG_END);
+	rb_benificary_splash = pw_create_radiobutton(splash_screen,50, 150, 20, 20, NULL, 
+			PW_BGCOLOR, GREY, 
+			PW_FONT, PW_BOLD_FONT, 
+			PW_FGCOLOR, "white", 
+			PW_TEXT, "",
+			PW_CALLBACK, PW_BUTTON_RELEASE_EVENT, keeper_enroll_splash,
+			PW_NA);
+
+	return ;
+
+
+}

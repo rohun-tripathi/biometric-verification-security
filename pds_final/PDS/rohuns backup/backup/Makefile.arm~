@@ -1,0 +1,15 @@
+CC= /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/bin/arm-xscale-linux-gnueabi-gcc -D __AMIDA__ -Wall -g
+
+LIBS= -L/opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib -lpwrap2 -lbiometric -lsqlite3 -lanet -lcurl -lautils -lgps -lwebcam -lpprinter 
+
+SRCS = Main.o funct2.o funct3.o funct4.o keybrd_funct.o bioenrlsec_funct.o pre_main.c root.c bioenroll.c
+
+RPATH= -Wl,-rpath-link /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib \
+	  -Wl,-rpath-link /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib
+
+FA: $(SRCS)
+	$(CC) $^ -o $@ $(RPATH) $(LIBS)
+
+clean:
+	rm -f *.o FA
+

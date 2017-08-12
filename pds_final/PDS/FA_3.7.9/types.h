@@ -1,0 +1,160 @@
+#include <pwrap2.h>
+#include <stdlib.h>
+#include <string.h>
+#include<sqlite3.h>
+#include<stdio.h>
+#include <unistd.h>
+#ifdef __AMIDA__
+#include <biometric.h>
+#endif
+//#include"live.h"
+#include"test.h"
+
+pw_widget frame_bioenrollpage ,toplevel,progress_frame,progress_label,frame_optionspage,frame_beneficary_details,frame_gprs_page,lbox_identify_must_photo_membs,lbox_identify_must_membs,frame_identify_must_photo,combo_muster_wkcode,frame_muster_check_report;
+
+Bool cb_splash(pw_widget w, pw_event e);
+void hide_frame_splash();
+void show_frame_option();
+void hide_frame_option();
+void show_message_frame();
+void show_frame_mainpage();
+void hide_frame_mainpage();
+void show_mcc_module();
+
+void show_btn_frame();
+void hide_btn_frame();
+
+
+extern Bool cb_entry_num(pw_widget w, pw_event e);
+extern Bool cb_entry_alpha(pw_widget w, pw_event e);
+
+int i,ret,no_worker_found,count;
+char date_format[15];
+int fps;
+int remove_all_templates_from_fps(int fps);
+int init_fps_in_iso();
+int uninit_fps(int fps);
+
+pw_widget message_frame,message_label,message_btn;
+
+//Defines for widget size
+#define PG_WTH 240
+#define PG_HT 270
+
+#define LBL_SMALL_HT 20
+#define LBL_NORMAL_HT 25
+#define LBL_LARGE_HT 50
+#define LBL_LARGE_WTH 234
+
+#define BTN_NORMAL_HT 25
+#define BTN_LARGE_HT 50
+#define BTN_NORMAL_WTH 50
+#define BTN_LARGE_WTH 150
+
+#define TAG_ENROLL "1"
+#define TAG_VERIFY "2"
+
+#ifdef __AMIDA__
+#define BUTT_SPLASH "/usr/local/apps/nrega_AP/imgs/splash.png"
+#define BUTT_FINGER "/usr/local/apps/nrega_AP/imgs/Hand.gif"
+#define BUTT_NORMAL "/usr/local/apps/nrega_AP/imgs/B_a.png"
+#define BUTT_ACTIVE "/usr/local/apps/nrega_AP/imgs/B_d.png"
+#define BUTT_DISABLE "/usr/local/apps/nrega_AP/imgs/disable.png"
+
+
+#define BUTT_FA "/usr/local/apps/nrega_AP/imgs/FA-MOD.png"
+#define BUTT_SEARCH "/usr/local/apps/nrega_AP/imgs/SEARCH.png"
+#define BUTT_SUBMIT "/usr/local/apps/nrega_AP/imgs/SUBMIT.png"
+#define BUTT_ADD "/usr/local/apps/nrega_AP/imgs/ADD.png"
+#define BUTT_FRWD "/usr/local/apps/nrega_AP/imgs/FRWD.png"
+#define BUTT_START "/usr/local/apps/nrega_AP/imgs/START.png"
+#define BUTT_DEL "/usr/local/apps/nrega_AP/imgs/DEL.png"
+
+#define BUTT_MCC "/usr/local/apps/nrega_AP/imgs/MCC-MOD.png"
+#define BUTT_MIS "/usr/local/apps/nrega_AP/imgs/MIS.png"
+#define BUTT_DEMAND "/usr/local/apps/nrega_AP/imgs/DEMAND.png"
+#define BUTT_DEMANDMIS "/usr/local/apps/nrega_AP/imgs/DEMANDMIS.png"
+
+#define BUTT_GPA "/usr/local/apps/nrega_AP/imgs/GP-ABSTRACT.PNG"
+
+
+#define BUTT_MUSTER "/usr/local/apps/nrega_AP/imgs/MSTR-RL.png"
+#define BUTT_BACK  "/usr/local/apps/nrega_AP/imgs/BACK.png"
+#define BUTT_SYNC "/usr/local/apps/nrega_AP/imgs/DT-SYNC.png"
+#define BUTT_UPLOAD "/usr/local/apps/nrega_AP/imgs/UPLOAD.png"
+#define BUTT_DWNLOAD "/usr/local/apps/nrega_AP/imgs/DWNLOAD.png"
+
+
+#define BUTT_ENROLL "/usr/local/apps/nrega_AP/imgs/BIOT-ENRL.png"
+#define BUTT_GRP "/usr/local/apps/nrega_AP/imgs/GRP-CRTN.png"
+#define BUTT_BATCH "/usr/local/apps/nrega_AP/imgs/BATCH-MGMT.png"
+#define BUTT_POS "/usr/local/apps/nrega_AP/imgs/POS-MGMT.png"
+#define BUTT_POSINFO "/usr/local/apps/nrega_AP/imgs/POS-INFO.png"
+#define BUTT_HH "/usr/local/apps/nrega_AP/imgs/HS-HLD-DWNLD.png"
+#define BUTT_WRKS "/usr/local/apps/nrega_AP/imgs/WRK-DWNLD.png"
+#define BUTT_SSS "/usr/local/apps/nrega_AP/imgs/SSS-GRP.DWNLD.png"
+#define BUTT_OK "/usr/local/apps/nrega_AP/imgs/OK.png"
+#define BUTT_WG_SEEK "/usr/local/apps/nrega_AP/imgs/WG_SRKR.png"
+#define BUTT_PAY "/usr/local/apps/nrega_AP/imgs/PAY-SLIP.png"
+#define BUTT_NEXT "/usr/local/apps/nrega_AP/imgs/next.gif"
+#define BUTT_SELECT "/usr/local/apps/nrega_AP/imgs/select.gif"
+#define BUTT_MVO "/usr/local/apps/nrega_AP/imgs/MVO.png"
+
+#define DB_PACK "/usr/local/apps/nrega_AP/db.dat"
+#define FP_TEMP_PATH "/usr/local/apps/nrega_AP/template/"
+#define PHOTO_PATH "/usr/local/apps/nrega_AP/photo/"
+#define FP_DEVICE BIO_SUPREMA_IN_ISO_FORMAT
+#define FP_SENSOR BIO_SUPREMA_IN_ISO_FORMAT
+#define TEMPLATE_SIZE 384
+#define FP_IMAGE_JPG "/tmp/fpimage.jpg"
+#define FP_IMAGE_RAW "/tmp/fpimage.raw"
+#define FP_IMAGE_PGM "/tmp/fpimage.pgm"
+#define FP_IMAGE "/tmp/fpimage"
+#define WC_IMAGE_JPG "/tmp/wcimage.jpg"
+#define FINGER "/tmp/finger.dat"
+
+#else
+#define BUTT_FINGER "imgs/Hand.gif"
+#define BUTT_SPLASH "imgs/splash.png"
+#define BUTT_NORMAL "imgs/B_a.png"
+#define BUTT_ACTIVE "imgs/b_d.png"
+#define BUTT_DISABLE "imgs/disable.png"
+#define CONFIGURE "configure.cnf"
+#define FP_IMAGE_JPG "/tmp/fpimage.jpg"
+#define FP_IMAGE_RAW "/tmp/fpimage.raw"
+#define FP_IMAGE_PGM "/tmp/fpimage.pgm"
+#define FP_IMAGE "/tmp/fpimage"
+#define WC_IMAGE_JPG "/tmp/wcimage.jpg"
+#define FINGER "/tmp/finger.dat"
+#define DB_PACK "db.dat"
+#endif
+
+#define BLUE "dark Blue"
+#define LINEN "linen"
+#define GREY "lightgrey"
+#define GREEN "#5F9EA0"
+//#define T "#805922"
+
+#define VIOLET "#6B2A75"
+#define COLOR3 "#48525f"
+#define COLOR4 "#bfbfbf"
+#define COLOR5 "#687378"
+
+#define GO "Go"
+#define OK "Ok"
+#define NEXT "Next"
+#define ENROLL "Enroll"
+#define BACK "Back"
+#define CANCEL "Cancel"
+#define IVRS "IVRS"
+#define PRINT "Print"
+#define RETRY "Retry"
+#define START "Start"
+#define CAPTURE "Capture"
+#define ALERT "Alert"
+#define CLEAR "Clear"
+#define PLACR_UR_FINGER "Place your finger"
+#define PLACE_YOUR_FINGER "Place your finger"
+
+
+

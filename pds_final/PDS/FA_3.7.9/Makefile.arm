@@ -1,0 +1,15 @@
+CC= /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/bin/arm-xscale-linux-gnueabi-gcc -D __AMIDA__ -Wall -g
+
+LIBS= -L/opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib -lpwrap2 -lbiometric -lsqlite3 -lanet -lcurl -lautils -lgps -lwebcam -lpprinter 
+
+SRCS= Main_page.o Functions.o Options_Page.o Base.o Bio_enroll.o Biometric_DetailsPage.o  MusterRoll_Page.o  Connect_Disconnect.o Gprs_Page.o  Gprs_function.o  gps.o string_list.o  gps.o db-utils.o Identify_grp.o Gprs_down.o Reports.o Camera.o  PosMangement.o Pos_infodetails.o Login_Page.o Mcc_login.o Response_all.o MVO_upload.o Mvo_report.o  Mvo_login.o  no_wrk_up.o  Memory_info_upload.o jobcard_split.o jobcards_update.o  Wage_info_down.o ftp_up.o Application_download.o FP_download.o Demand_options.o demand_creation_page.o demand_upload.o  demand_report.o demand_allocation_page.o work_allocation_upload.o work_allocation_report.o mcc_work_alloc_down.o mcc_demand_groups_down.o no_work_demand_up.o noworkdemand.o mcc_work_allocation_report.o notenroll_photocapture.o rejection_details.o dwn_work_alloc_rejection.o dwn_demand_rejection.o batch_info_dwn.o  normal_login.o  normal_page.o
+
+RPATH= -Wl,-rpath-link /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib \
+	  -Wl,-rpath-link /opt/Olai/arm-xscale-linux-gnueabi/gcc-4.1.2-glibc-2.5-kernel-2.6.18/arm-xscale-linux-gnueabi/lib
+
+FA: $(SRCS)
+	$(CC) $^ -o $@ $(RPATH) $(LIBS)
+
+clean:
+	rm -f *.o FA
+
